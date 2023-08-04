@@ -1,0 +1,22 @@
+{% extends 'home/base.html' %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+    <div class="container mt-4">
+        <h2 class="alert alert-info text-center">Assign New Course</h2>
+        <h3>Advised Course</h3>
+        <div class="my-4">
+
+
+            <form action="" method="post">
+                {% csrf_token %}
+            <table>
+                {{form.as_table}}
+            </table>
+            <input type="Submit" name="submit">
+            </form>
+        </div>
+
+    </div>
+{% endblock %}

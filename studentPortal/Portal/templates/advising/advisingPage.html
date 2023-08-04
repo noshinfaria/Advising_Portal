@@ -1,0 +1,448 @@
+{% extends 'home/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/advisingpage.css'%}"  type="text/css">
+<style>
+    tr{
+        cursor: pointer;
+    }
+</style>
+
+<div class='container my-4'>
+<h6> <a href="{% url 'home' %}" >Home</a> / <a href="{% url 'advising' %}" > Advising</a></h6>
+<br>
+<div class="btns mb-3">
+    <button id='fgradebtn' type="button" class="btn btn-primary">F Grade Course</button>
+    <button id='recommendedbtn' type="button" class="btn btn-secondary">Recommended Course</button>
+    <button id='dbtn' type="button" class="btn btn-success">D/D+ Courses</button>
+    <button id='retakebtn' type="button" class="btn btn-danger">Retakable Courses</button>
+
+</div>
+<div class="row">
+<!-- F grade courses -->
+    <div class="col-md-7" id='fgrade' style='display: none;'>
+
+        <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">CourseCode</th>
+            <th scope="col">Section</th>
+            <th scope="col">Credit</th>
+            <th scope="col">Timing</th>
+            <th scope="col">Seats</th>
+          </tr>
+        </thead>
+
+
+    <tbody>
+        <h3>Hello {{request.user.username}}</h3>
+
+        <div id='alreadyadded' class="alert alert-danger" style="display:none">Course already added</div>
+
+        {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <div>{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</div>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+
+{% for student in user_info %}
+        {% if request.user.username == student.user.username %}
+        {% for data in info %}
+
+{% if data.for_dept.name == student.dept.name or data.for_dept.name == "Select All" %}
+        {% for previous in previous_taken %}
+            {% if data.course.course_code == previous.course and previous.student_info == request.user and previous.grade == 'F' %}
+        <tr onclick="myFun('{{data.slug}}')", class='tablerows' data-href='{{data.current_semester}}'>
+
+            <td></td>
+
+            <td>{{ data.course.course_code }}</td>
+            <td>{{ data.section }}</td>
+            <td>{{ data.course.credit }}</td>
+            <td>{{ data.Time_WeekDay }}</td>
+            <td>{{ data.taken }}/{{ data.available }}</td>
+
+        </tr>
+        {% if data.has_lab == True %}
+            <td></td>
+            <td>{{ data.course.course_code }} Lab</td>
+            <td>{{ data.section }}</td>
+            <td>{{ data.course.credit }}</td>
+            <td>{{ data.l_Time_WeekDay }}</td>
+            <td>{{ data.taken }}/{{ data.available }}</td>
+            {% endif%}
+{% endif %}
+{% endfor %}
+{% endif %}
+
+    {% endfor %}
+{% endif %}
+    {% endfor %}
+
+    </tbody>
+</table>
+    </div>
+
+<!-- Recommended courses -->
+
+<div class="col-md-7" id='recommended' style='display: block;'>
+
+    <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">CourseCode</th>
+            <th scope="col">Section</th>
+            <th scope="col">Credit</th>
+            <th scope="col">Timing</th>
+            <th scope="col">Seats</th>
+          </tr>
+        </thead>
+
+
+    <tbody>
+        <h3>hello {{request.user.username}}</h3>
+
+        <div id='alreadyadded' class="alert alert-danger" style="display:none">Course already added</div>
+
+        {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <div>{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</div>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+{% for student in user_info %}
+        {% if request.user.username == student.user.username %}
+        {% for data in info %}
+{% if data.for_dept.name == student.dept.name or data.for_dept.name == "Select All" %}
+        <!--{% for previous in previous_taken %}
+            {% if data.course.course_code == previous.course %}-->
+
+
+        <tr onclick="myFun('{{data.slug}}')", class='tablerows' data-href='{{data.current_semester}}'>
+
+            <td></td>
+
+            <td>{{ data.course.course_code }}</td>
+            <td>{{ data.section }}</td>
+            <td>{{ data.course.credit }}</td>
+            <td>{{ data.Time_WeekDay }}</td>
+            <td>{{ data.taken }}/{{ data.available }}</td>
+
+        </tr>
+        {% if data.has_lab == True %}
+            <td></td>
+            <td>{{ data.course.course_code }} Lab</td>
+            <td>{{ data.section }}</td>
+            <td>{{ data.course.credit }}</td>
+            <td>{{ data.l_Time_WeekDay }}</td>
+            <td>{{ data.taken }}/{{ data.available }}</td>
+            {% endif%}
+<!--{% endif %}
+{% endfor %}-->
+{% endif %}
+
+    {% endfor %}
+{% endif %}
+    {% endfor %}
+
+    </tbody>
+</table>
+
+    </div>
+
+
+<!-- D/D+ grade courses -->
+
+    <div class="col-md-7" id='dd' style='display: none;'>
+
+        <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">CourseCode</th>
+            <th scope="col">Section</th>
+            <th scope="col">Credit</th>
+            <th scope="col">Timing</th>
+            <th scope="col">Seats</th>
+          </tr>
+        </thead>
+
+
+    <tbody>
+        <h3>Hello {{request.user.username}}</h3>
+
+        <div id='alreadyadded' class="alert alert-danger" style="display:none">Course already added</div>
+
+        {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <div>{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</div>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+
+{% for student in user_info %}
+        {% if request.user.username == student.user.username %}
+        {% for data in info %}
+
+{% if data.for_dept.name == student.dept.name or data.for_dept.name == "Select All" %}
+        {% for previous in previous_taken %}
+            {% if data.course.course_code == previous.course and previous.student_info == request.user %}
+                {% if previous.grade == 'D+' or previous.grade == 'D' %}
+        <tr onclick="myFun('{{data.slug}}')", class='tablerows' data-href='{{data.current_semester}}'>
+
+            <td></td>
+
+            <td>{{ data.course.course_code }}</td>
+            <td>{{ data.section }}</td>
+            <td>{{ data.course.credit }}</td>
+            <td>{{ data.Time_WeekDay }}</td>
+            <td>{{ data.taken }}/{{ data.available }}</td>
+
+        </tr>
+        {% if data.has_lab == True %}
+            <td></td>
+            <td>{{ data.course.course_code }} Lab</td>
+            <td>{{ data.section }}</td>
+            <td>{{ data.course.credit }}</td>
+            <td>{{ data.l_Time_WeekDay }}</td>
+            <td>{{ data.taken }}/{{ data.available }}</td>
+            {% endif%}
+            {% endif%}
+        {% endif %}
+{% endfor %}
+{% endif %}
+
+    {% endfor %}
+{% endif %}
+    {% endfor %}
+
+    </tbody>
+</table>
+    </div>
+
+<!-- retakable courses -->
+
+    <div class="col-md-7" id='retake' style='display: none;'>
+
+        <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">CourseCode</th>
+            <th scope="col">Section</th>
+            <th scope="col">Credit</th>
+            <th scope="col">Timing</th>
+            <th scope="col">Seats</th>
+          </tr>
+        </thead>
+
+
+    <tbody>
+        <h3>Hello {{request.user.username}}</h3>
+
+        <div id='alreadyadded' class="alert alert-danger" style="display:none">Course already added</div>
+
+        {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <div>{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</div>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+
+{% for student in user_info %}
+        {% if request.user.username == student.user.username %}
+        {% for data in info %}
+
+{% if data.for_dept.name == student.dept.name or data.for_dept.name == "Select All" %}
+        {% for previous in previous_taken %}
+            {% if data.course.course_code == previous.course and previous.student_info == request.user %}
+                {% if previous.grade == 'C-' or previous.grade == 'C' or previous.grade == 'C+' or previous.grade == 'D+' or previous.grade == 'D' or previous.grade == 'F' %}
+        <tr onclick="myFun('{{data.slug}}')", class='tablerows' data-href='{{data.current_semester}}'>
+
+            <td></td>
+
+            <td>{{ data.course.course_code }}</td>
+            <td>{{ data.section }}</td>
+            <td>{{ data.course.credit }}</td>
+            <td>{{ data.Time_WeekDay }}</td>
+            <td>{{ data.taken }}/{{ data.available }}</td>
+
+        </tr>
+        {% if data.has_lab == True %}
+            <td></td>
+            <td>{{ data.course.course_code }} Lab</td>
+            <td>{{ data.section }}</td>
+            <td>{{ data.course.credit }}</td>
+            <td>{{ data.l_Time_WeekDay }}</td>
+            <td>{{ data.taken }}/{{ data.available }}</td>
+            {% endif%}
+            {% endif%}
+        {% endif %}
+{% endfor %}
+{% endif %}
+
+    {% endfor %}
+{% endif %}
+    {% endfor %}
+
+    </tbody>
+</table>
+    </div>
+
+<!-- Selected Courses -->
+
+<div class="col-md-5 selected">
+    <h4 class='mx-4'>SELECTED COURSES</h4>
+    <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">CourseCode</th>
+            <th scope="col">Section</th>
+            <th scope="col">Credit</th>
+            <th scope="col">Timing</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+
+
+    <tbody>
+        {% for d in taken %}
+
+        {% if request.user.username == d.student_info.username %}
+        <tr>
+            <td></td>
+            <td>{{ d.course }}</td>
+            <td>{{ d.section }}</td>
+            <td>{{ d.credit }}</td>
+            <td>{{ d.Time_WeekDay }}</td>
+            <td><button onclick="myFun1('{{d.course}},{{d.section}},{{d.student_info}},{{d.current_semester}}')" class='btn btn-danger'>Delete</button></td>
+
+</tr>
+        {% if d.has_lab == True %}
+
+            <td></td>
+            <td>{{ d.course }} Lab</td>
+            <td>{{ d.section }}</td>
+            <td>{{ d.credit }}</td>
+            <td>{{ d.l_Time_WeekDay }}</td>
+            <td><button onclick="myFun1('{{d.course}},{{d.section}},{{d.student_info}},{{d.current_semester}}')" class='btn btn-danger'>Delete</button></td>
+
+            {% endif%}
+            {% endif %}
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+</div></div>
+
+
+<script src="{% static 'js/advising.js' %}"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    {% comment %} const rows=document.querySelectorAll('tr[data-href]')
+    rows.forEach(row=>{
+        row.addEventListener('click',()=>{
+            console.log(row.innerText)
+
+        })
+    }) {% endcomment %}
+
+
+     const myFun=(data1)=>{
+
+        obj={details:data1}
+         $.ajax({
+            url:"{% url 'advising' %}",
+            method:"POST",
+            data:obj,
+            success:function(data){
+                if(data.status==200){
+                    setTimeout(location.reload(), 1500);
+                    setTimeout(location.reload(), 3000);
+                location.reload();
+                location.reload();
+                location.reload();
+                location.reload();
+                location.reload();
+                location.reload();
+                location.reload();
+                location.reload();
+                location.reload();
+                location.reload();
+
+                location.reload();
+                location.reload();
+                location.reload();
+                }
+                else if(data.status==300){
+                    location.reload();
+                    {% comment %} alreadyadded=document.getElementById('alreadyadded');
+                    alreadyadded.style.display='block' {% endcomment %}
+
+
+                }
+                else if(data.status==404){
+                    location.reload();
+                    }
+                else if(data.status==500){
+                    location.reload();
+                    }
+                else if(data.status==600){
+                    location.reload();
+                    }
+
+
+            }
+        })
+
+    }
+
+
+
+    const myFun1=(data1)=>{
+
+        obj={details:data1}
+         $.ajax({
+            url:"{% url 'delete' %}",
+            method:"POST",
+            data:obj,
+            success:function(data){
+                if(data.status==200){
+                    setTimeout(location.reload(), 1500);
+                }
+
+                setTimeout(location.reload(), 3000);
+                location.reload();
+                location.reload();
+                location.reload();
+                location.reload();
+                location.reload();
+                location.reload();
+                location.reload();
+                location.reload();
+                location.reload();
+                location.reload();
+
+                location.reload();
+                location.reload();
+                location.reload();
+            }
+        })
+        location.reload();
+    }
+</script>
+{% endblock content %}

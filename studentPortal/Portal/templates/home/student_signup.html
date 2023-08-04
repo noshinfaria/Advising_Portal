@@ -1,0 +1,18 @@
+{% extends 'home/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="alert alert-info text-center">Student Register</h2>
+<form  method="POST" id="StudentSignUpForm" accept-charset="utf-8">
+{% csrf_token %}
+    <table>
+        {{form.as_table}}
+    </table>
+
+<input type="Submit" name="submit" value="Signup">
+</form>
+</div>
+
+
+{% endblock %}

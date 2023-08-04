@@ -1,0 +1,40 @@
+{% extends 'home/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-md-5 col-sm-6">
+        </div>
+        <a href="{% url 'home' %}">< Back</a>
+    </div>
+</div>
+<div class="container">
+   {% for data in info %}
+    <div class="row justify-content-center mt-3">
+        <div class="col-md-5 col-sm-12 border-bottom position-relative">
+            <h3>{{ data.course.course_code }}</h3>
+            <p>{{ data.section }}</p>
+            <p>{{ data.course.credit }}</p>
+            <p>{{ data.Time_WeekDay }}</p>
+            <p>{{ data.Room }}</p>
+            <p>{{ data.available }}</p>
+            <p>{{ data.taken }}</p>
+            {% if data.has_lab == True %}
+
+            <div class="col-md-5 col-sm-12 border-bottom position-relative">
+            <h3>{{ data.course.course_code }}</h3>
+            <p>{{ data.section }}</p>
+            <p>{{ data.course.credit }}</p>
+                <p>{{ data.l_Time_WeekDay }}</p>
+            <p>{{ data.l_Room }}</p>
+            <p>{{ data.available }}</p>
+            <p>{{ data.taken }}</p>
+
+            </div>
+            {% endif%}
+
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock content %}

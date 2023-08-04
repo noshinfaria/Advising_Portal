@@ -1,0 +1,56 @@
+{% extends 'home/base.html' %}
+
+
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+
+
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
+
+        <!-- Page Heading -->
+        <div class="container mt-4">
+     <div>
+
+        <h2 class="alert alert-info text-center">Profile</h2>
+
+        </div>
+
+        <!-- Main Content Here -->
+        <div class="row">
+          <div class="col-lg-2"></div>
+          <div class="col-lg-3 my-5">
+            <img src="{% static 'images/default.jpg' %}" class="rounded float-right" height="300px" width="300px">
+          </div>
+          <div class="card o-hidden border-0 shadow-lg my-5 col-lg-5">
+            <div class="card-body">
+                <h2>{{user.first_name}} {{user.last_name}}</h2>
+                <p><strong>username: </strong> {{user.username}} </p>
+                <p><strong>Email: </strong> {{user.email}} </p>
+                {% if student %}
+                {% for s in student %}
+                <p><strong>department: </strong> {{s.dept}} </p>
+                <p><strong>Admitted Semester: </strong> {{s.admitted_Semester}} </p>
+                {% endfor %}
+                {% endif %}
+
+                {% if faculty %}
+                {% for f in faculty %}
+                <p><strong>department: </strong> {{f.dept}} </p>
+                {% endfor %}
+                {% endif %}
+
+                <!--<a href="" class="site-btn btn-sm btn-primary shadow-sm">Update Profile</a>-->
+            </div>
+          </div>
+        </div>
+
+
+
+    </div></div>
+
+
+    <!-- /.container-fluid -->
+{% endblock %}

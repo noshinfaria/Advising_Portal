@@ -1,0 +1,441 @@
+{% extends 'home/base.html' %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/advisingpage.css'%}"  type="text/css">
+<style>
+    tr{
+        cursor: pointer;
+    }
+</style>
+
+<br>
+
+
+ <div class="container mt-4">
+
+
+        <h2 class="alert alert-info text-center">Advising Schedule</h2>
+        <form action="" method="post">
+            <!--<input type="text" name="student" class="form-control mb-3" placeholder='Enter the student id'>-->
+
+            <select name='user' id='user' class="form-select my-3" aria-label="Enter the student id">
+           {% for y in user %}
+           <option value="{{y.id}}">{{y.username}}</option>
+           {% endfor %}
+         </select>
+        <select name='semester' id='semester' class="form-select my-3" aria-label="Default select example">
+           {% for x in semester %}
+           <option value="{{x.semester}}">{{x.semester}}</option>
+           {% endfor %}
+         </select>
+         <button type='submit' class='btn btn-dark rounded-pill'>Show Courses</button>
+        </form>
+
+
+<br>
+     {% if add != 'Null' %}
+
+     <div class="btns mb-3">
+        <button id='fgradebtn' type="button" class="btn btn-primary">F Grade Course</button>
+        <button id='recommendedbtn' type="button" class="btn btn-secondary">Recommended Course</button>
+        <button id='dbtn' type="button" class="btn btn-success">D/D+ Courses</button>
+        <button id='retakebtn' type="button" class="btn btn-danger">Retakable Courses</button>
+
+    </div>
+     <div class="row">
+
+<!--F grade Course -->
+
+         <div class="col-md-7" id='fgrade' style='display: none;'>
+    <h3>F grade reporting :p </h3>
+             <table  class="table table-hover">
+            <thead>
+              <tr>
+                  <th scope="col">#</th>
+                <th scope="col">CourseCode</th>
+                <th scope="col">Section</th>
+                  <th scope="col">Credit</th>
+                <th scope="col">Time</th>
+                <th scope="col">Seats</th>
+
+              </tr>
+            </thead>
+            <tbody>
+            <div id='alreadyadded' class="alert alert-danger" style="display:none">Course already added</div>
+
+        {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <div>{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</div>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+
+                {% for s in student %}
+                {% for a in add %}
+                {% if a.for_dept.name == "Select All" or a.for_dept.name == s.dept.name %}
+                {% for previous in previous_taken %}
+            {% if a.course.course_code == previous.course and previous.grade == 'F' %}
+              <tr  onclick="myFun2('{{a.slug}},{{s.user.id}},{{a.current_semester.semester}}')", class='tablerows' data-href='{{a.current_semester}}'>
+                <td></td>
+
+            <td>{{ a.course.course_code }}</td>
+            <td>{{ a.section }}</td>
+            <td>{{ a.course.credit }}</td>
+            <td>{{ a.Time_WeekDay }}</td>
+            <td>{{ a.taken }}/{{ a.available }}</td>
+
+              </tr>
+              {% if a.has_lab == True %}
+              <td></td>
+            <td>{{ a.course.course_code }} Lab</td>
+            <td>{{ a.section }}</td>
+            <td>{{ a.course.credit }}</td>
+            <td>{{ a.l_Time_WeekDay }}</td>
+            <td>{{ a.taken }}/{{ a.available }}</td>
+
+              {% endif %}
+                {% endif %}
+              {% endfor %}
+                {% endif %}
+              {% endfor %} {% endfor %}
+
+
+
+            </tbody>
+          </table>
+    </div>
+
+<!-- recommended Course -->
+
+     <div  class="col-md-7" id='recommended' style='display: block;'>
+        <table  class="table table-hover">
+            <thead>
+              <tr>
+                  <th scope="col">#</th>
+                <th scope="col">CourseCode</th>
+                <th scope="col">Section</th>
+                  <th scope="col">Credit</th>
+                <th scope="col">Time</th>
+                <th scope="col">Seats</th>
+
+              </tr>
+            </thead>
+            <tbody>
+            <div id='alreadyadded' class="alert alert-danger" style="display:none">Course already added</div>
+
+        {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <div>{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</div>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+
+                {% for s in student %}
+                {% for a in add %}
+                {% if a.for_dept.name == "Select All" or a.for_dept.name == s.dept.name %}
+                {% for previous in previous_taken %}
+            {% if a.course.course_code != previous.course %}
+              <tr  onclick="myFun2('{{a.slug}},{{s.user.id}},{{a.current_semester.semester}}')", class='tablerows' data-href='{{a.current_semester}}'>
+                <td></td>
+
+            <td>{{ a.course.course_code }}</td>
+            <td>{{ a.section }}</td>
+            <td>{{ a.course.credit }}</td>
+            <td>{{ a.Time_WeekDay }}</td>
+            <td>{{ a.taken }}/{{ a.available }}</td>
+
+              </tr>
+              {% if a.has_lab == True %}
+              <td></td>
+            <td>{{ a.course.course_code }} Lab</td>
+            <td>{{ a.section }}</td>
+            <td>{{ a.course.credit }}</td>
+            <td>{{ a.l_Time_WeekDay }}</td>
+            <td>{{ a.taken }}/{{ a.available }}</td>
+
+              {% endif %}
+                {% endif %}
+              {% endfor %}
+                {% endif %}
+              {% endfor %} {% endfor %}
+
+
+
+            </tbody>
+          </table>
+     </div>
+
+<!-- D/D+ grade Course -->
+
+         <div class="col-md-7" id='dd' style='display: none;'>
+        <h3>D/D+ grade reporting :p </h3>
+             <table  class="table table-hover">
+            <thead>
+              <tr>
+                  <th scope="col">#</th>
+                <th scope="col">CourseCode</th>
+                <th scope="col">Section</th>
+                  <th scope="col">Credit</th>
+                <th scope="col">Time</th>
+                <th scope="col">Seats</th>
+
+              </tr>
+            </thead>
+            <tbody>
+            <div id='alreadyadded' class="alert alert-danger" style="display:none">Course already added</div>
+
+        {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <div>{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</div>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+
+                {% for s in student %}
+                {% for a in add %}
+                {% if a.for_dept.name == "Select All" or a.for_dept.name == s.dept.name %}
+                {% for previous in previous_taken %}
+            {% if a.course.course_code == previous.course %}
+            {% if previous.grade == 'D' or previous.grade == 'D+' %}
+              <tr  onclick="myFun2('{{a.slug}},{{s.user.id}},{{a.current_semester.semester}}')", class='tablerows' data-href='{{a.current_semester}}'>
+                <td></td>
+
+            <td>{{ a.course.course_code }}</td>
+            <td>{{ a.section }}</td>
+            <td>{{ a.course.credit }}</td>
+            <td>{{ a.Time_WeekDay }}</td>
+            <td>{{ a.taken }}/{{ a.available }}</td>
+
+              </tr>
+              {% if a.has_lab == True %}
+              <td></td>
+            <td>{{ a.course.course_code }} Lab</td>
+            <td>{{ a.section }}</td>
+            <td>{{ a.course.credit }}</td>
+            <td>{{ a.l_Time_WeekDay }}</td>
+            <td>{{ a.taken }}/{{ a.available }}</td>
+
+              {% endif %}
+            {% endif %}
+                {% endif %}
+              {% endfor %}
+                {% endif %}
+              {% endfor %} {% endfor %}
+
+
+
+            </tbody>
+          </table>
+    </div>
+
+<!-- Retakable Course -->
+
+    <div class="col-md-7" id='retake' style='display: none;'>
+        <h3>Retake reporting :p </h3>
+        <table  class="table table-hover">
+            <thead>
+              <tr>
+                  <th scope="col">#</th>
+                <th scope="col">CourseCode</th>
+                <th scope="col">Section</th>
+                  <th scope="col">Credit</th>
+                <th scope="col">Time</th>
+                <th scope="col">Seats</th>
+
+              </tr>
+            </thead>
+            <tbody>
+            <div id='alreadyadded' class="alert alert-danger" style="display:none">Course already added</div>
+
+        {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <div>{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</div>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+
+                {% for s in student %}
+                {% for a in add %}
+                {% if a.for_dept.name == "Select All" or a.for_dept.name == s.dept.name %}
+                {% for previous in previous_taken %}
+            {% if a.course.course_code == previous.course %}
+            {% if previous.grade == 'C-' or previous.grade == 'C' or previous.grade == 'C+' or previous.grade == 'D+' or previous.grade == 'D' or previous.grade == 'F' %}
+
+              <tr  onclick="myFun2('{{a.slug}},{{s.user.id}},{{a.current_semester.semester}}')", class='tablerows' data-href='{{a.current_semester}}'>
+                <td></td>
+
+            <td>{{ a.course.course_code }}</td>
+            <td>{{ a.section }}</td>
+            <td>{{ a.course.credit }}</td>
+            <td>{{ a.Time_WeekDay }}</td>
+            <td>{{ a.taken }}/{{ a.available }}</td>
+
+              </tr>
+              {% if a.has_lab == True %}
+              <td></td>
+            <td>{{ a.course.course_code }} Lab</td>
+            <td>{{ a.section }}</td>
+            <td>{{ a.course.credit }}</td>
+            <td>{{ a.l_Time_WeekDay }}</td>
+            <td>{{ a.taken }}/{{ a.available }}</td>
+
+              {% endif %}
+            {% endif %}
+                {% endif %}
+              {% endfor %}
+                {% endif %}
+              {% endfor %} {% endfor %}
+
+
+
+            </tbody>
+          </table>
+    </div>
+
+
+
+
+
+<div class="col-md-5 selected">
+    <h4 class='mx-4'>SELECTED COURSES</h4>
+    <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">CourseCode</th>
+            <th scope="col">Section</th>
+            <th scope="col">Credit</th>
+            <th scope="col">Timing</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+
+
+        <tbody>
+        {% for d in taken %}
+        {% for s in student %}
+        {% if s.user.username == d.student_info.username %}
+
+
+        <tr>
+            <td></td>
+            <td>{{ d.course }}</td>
+            <td>{{ d.section }}</td>
+            <td>{{ d.credit }}</td>
+            <td>{{ d.Time_WeekDay }}</td>
+            <td><button onclick="myFun3('{{d.course}},{{d.section}},{{d.student_info.id}},{{d.current_semester}}')" class='btn btn-danger'>Delete</button></td>
+
+</tr>
+        {% if d.has_lab == True %}
+
+            <td></td>
+            <td>{{ d.course }} Lab</td>
+            <td>{{ d.section }}</td>
+            <td>{{ d.credit }}</td>
+            <td>{{ d.l_Time_WeekDay }}</td>
+            <td><button onclick="myFun3('{{d.course}},{{d.section}},{{d.student_info}},{{d.current_semester}}')" class='btn btn-danger'>Delete</button></td>
+
+
+            {% endif %}
+        {% endif %}
+        {% endfor %}
+        {% endfor %}
+
+        </tbody>
+    </table>
+</div> </div></div></div>
+{% endif %}
+
+<script src="{% static 'js/advising.js' %}"></script>
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+ <script>
+     
+    const myFun2=(data1)=>{
+        console.log(data1)
+        obj={details1:data1}
+         $.ajax({
+            url:"{% url 'course_taken' %}",
+            method:"POST",
+            data:obj,
+            success:function(data){
+                if(data.status==200){
+                    setTimeout(location.reload(), 1500);
+                    setTimeout(location.reload(), 3000);
+                location.reload();
+                location.reload();
+                location.reload();
+                location.reload();
+                location.reload();
+                location.reload();
+                location.reload();
+                location.reload();
+                location.reload();
+                location.reload();
+
+                location.reload();
+                location.reload();
+                location.reload();
+                }
+                else if(data.status==300){
+                    location.reload();
+                    {% comment %} alreadyadded=document.getElementById('alreadyadded');
+                    alreadyadded.style.display='block' {% endcomment %}
+
+
+                }
+                else if(data.status==404){
+                    location.reload();
+                    }
+                else if(data.status==500){
+                    location.reload();
+                    }
+
+            }
+        })
+
+    }
+
+
+     const myFun3=(data1)=>{
+
+        obj={details:data1}
+         $.ajax({
+            url:"{% url 'delete_by_faculty' %}",
+            method:"POST",
+            data:obj,
+            success:function(data){
+                if(data.status==200){
+                    setTimeout(location.reload(), 1500);
+                }
+
+                setTimeout(location.reload(), 3000);
+                location.reload();
+                location.reload();
+                location.reload();
+                location.reload();
+                location.reload();
+                location.reload();
+                location.reload();
+                location.reload();
+                location.reload();
+                location.reload();
+
+                location.reload();
+                location.reload();
+                location.reload();
+            }
+        })
+        location.reload();
+    }
+ </script>
+{% endblock content %}
+
+

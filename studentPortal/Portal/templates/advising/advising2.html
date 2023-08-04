@@ -1,0 +1,7 @@
+{% if request.user.is_student %}
+{% extends 'advisingPage' %}
+
+{% elif %}
+{% extends 'advising_by_faculty' %}
+
+{% endif %}

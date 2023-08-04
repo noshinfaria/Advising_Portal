@@ -1,0 +1,17 @@
+{% extends 'home/base.html' %}
+{% block content %}
+ <div class="container mt-4">
+<h2 class='alert alert-danger text-center'>Drop Semester</h2>
+<form action="" method="post" class='container'>
+    <label>Select Semester</label>
+    <select name='semester' id='semester' class="form-select my-3" aria-label="Default select example">
+       {% for x in semesters %}
+       <option value="{{x.semester}}">{{x.semester}}</option>
+       {% endfor %}
+     </select>
+
+     <textarea name="msg" placeholder='please mention your reason here' class='form-control' id="" cols="30" rows="10"></textarea>
+     <button type='submit' class='btn btn-primary my-3 rounded-pill'>Submit Request</button>
+    </form>
+ </div>
+{% endblock content %}

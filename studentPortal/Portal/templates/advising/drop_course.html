@@ -1,0 +1,109 @@
+{% extends 'home/base.html' %}
+{% block content %}
+<h2 class='alert alert-danger'>Drop Course</h2>
+<form action="" method="post" class='container'>
+    <label>Select Student</label>
+    <select name='user1' id='semester' class="form-select my-3" aria-label="Default select example">
+       {% for x in user %}
+       <option value="{{x.id}}">{{x.username}}</option>
+       {% endfor %}
+     </select>
+     <button type="submit" class='rounded-pill btn btn-success'>Get Courses</button>
+    </form>
+     <div>
+       {% if student %}
+       <h3>Showing results for <span class='bg-dark text-white'>{{student}}</span></h3>
+       {% endif %}
+       <br>
+        <h4 class='mx-4'>SELECTED COURSES</h4>
+        <table class="table table-hover">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">CourseCode</th>
+                <th scope="col">Section</th>
+                <th scope="col">Credit</th>
+                <th scope="col">Timing</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+    
+    
+            <tbody>
+            {% for d in taken %}
+            
+            
+    {% if student == d.student_info.username %}
+    
+    
+    
+            <tr>
+                <td></td>
+                <td>{{ d.course }}</td>
+                <td>{{ d.section }}</td>
+                <td>{{ d.credit }}</td>
+                <td>{{ d.Time_WeekDay }}</td>
+                {% if d.withdraw_status %}
+                <td><button onclick="drop('{{d.course}},{{d.section}},{{d.student_info.id}},{{d.current_semester}},{{stuId}}')" class='btn btn-danger disabled'>Dropped</button></td>
+                {% else %}
+                <td><button onclick="drop('{{d.course}},{{d.section}},{{d.student_info.id}},{{d.current_semester}},{{stuId}}')" class='btn btn-danger '>Drop</button></td>
+                {% endif %}
+    </tr>
+            {% if d.has_lab == True %}
+    
+                <td></td>
+                <td>{{ d.course }} Lab</td>
+                <td>{{ d.section }}</td>
+                <td>{{ d.credit }}</td>
+                <td>{{ d.l_Time_WeekDay }}</td>
+                {% if d.withdraw_status %}
+                <td><button onclick="drop('{{d.course}},{{d.section}},{{d.student_info.id}},{{d.current_semester}}')" class='btn btn-danger disabled'>Dropped</button></td>
+                {% else %}
+                <td><button onclick="drop('{{d.course}},{{d.section}},{{d.student_info.id}},{{d.current_semester}},{{stuId}}')" class='btn btn-danger '>Drop</button></td>
+                {% endif %}
+    
+    
+                {% endif %}
+                {% endif %}
+            {% endfor %}
+            
+    
+            </tbody>
+        </table>
+     </div>
+     
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    
+    <script>
+      function drop(data1){
+        obj={details:data1}
+         $.ajax({
+            url:"{% url 'drop' %}",
+            method:"POST",
+            data:obj,
+            success:function(data){
+                if(data.status==200){
+                    setTimeout(location.reload(), 1500);
+                }
+
+                setTimeout(location.reload(), 3000);
+                location.reload();
+                location.reload();
+                location.reload();
+                location.reload();
+                location.reload();
+                location.reload();
+                location.reload();
+                location.reload();
+                location.reload();
+                location.reload();
+
+                location.reload();
+                location.reload();
+                location.reload();
+            }
+        })
+        location.reload();
+      }
+    </script>
+{% endblock %}

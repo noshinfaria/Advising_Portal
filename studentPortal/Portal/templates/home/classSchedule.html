@@ -1,0 +1,95 @@
+{% extends 'home/base.html' %}
+{% load static %}
+{% block content %}
+ <div class="container mt-4">
+     <div>
+
+        <h2 class="alert alert-info text-center">Class Schedule</h2>
+        <form action="" method="post">
+        <select name='semester' id='semester' class="form-select my-3" aria-label="Default select example">
+           {% for x in semesters %}
+           <option value="{{x.semester}}">{{x.semester}}</option>
+           {% endfor %}
+         </select>
+         <button type='submit' class='btn btn-dark rounded-pill'>Show Courses</button>
+        </form>
+     </div>
+     {% if courses != 'Null' %}
+     <div  id="table1"   class='my-3'>
+        <table  class="table table-hover">
+            <thead>
+              <tr>
+                <th scope="col">Course</th>
+                <th scope="col">Credit</th>
+                <th scope="col">Section</th>
+                <th scope="col">Time</th>
+                <th scope="col">Room</th>
+                <th scope="col">Faculty</th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for course in courses %}
+              <tr>
+                <td>{{course.course}}</td>
+                <td>{{course.credit}}</td>
+                <td>{{course.section}}</td>
+                <td>{{course.Time_WeekDay}}</td>
+                <td>{{course.Room}}</td>
+                <td>{{course.faculty_initial}}</td>
+                
+              </tr>
+              {% if course.has_lab == True %}
+              <td>{{course.course}} Lab</td>
+                <td>{{course.credit}}</td>
+                <td>{{course.section}}</td>
+                <td>{{course.l_Time_WeekDay}}</td>
+                <td>{{course.Room}}</td>
+                <td>{{course.faculty_initial}}</td>
+                
+              {% endif %}
+              {% endfor %}
+            </tbody>
+          </table>
+
+     </div>
+     {% endif %}
+    
+ </div>
+
+
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+ <script>
+     const getCourses=()=>{
+         const table=document.getElementById('table1')
+         const semester=document.getElementById('semester').value
+
+         obj={semester:semester}
+         $.ajax({
+            url:"{% url 'schedule' %}",
+            method:"POST",
+            data:obj,
+            success:function(data){
+                if(data.status==200){
+                    alert("paisi")
+                }
+                                
+            }
+        })
+
+
+
+
+
+
+
+
+
+
+         table.className="table table-hover my-3"
+         table.style.display='inline-block'
+
+
+
+     }
+ </script>
+{% endblock content %}

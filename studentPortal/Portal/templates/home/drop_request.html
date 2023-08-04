@@ -1,0 +1,49 @@
+{% extends 'home/base.html' %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-md-7">
+        <div class="container mt-4">
+
+        
+        <form action="" method="post">
+            <!--<input type="text" name="student" class="form-control mb-3" placeholder='Enter the student id'>-->
+
+            <select name='user' id='user' class="form-select my-3" aria-label="Enter the student id">
+           {% for y in user %}
+           <option value="{{y.id}}">{{y.username}}</option>
+           {% endfor %}
+         </select>
+        <select name='semester' id='semester' class="form-select my-3" aria-label="Default select example">
+           {% for x in semester %}
+           <option value="{{x.semester}}">{{x.semester}}</option>
+           {% endfor %}
+         </select>
+         <button type='submit' class='btn btn-danger rounded-pill'>Drop Semester</button>
+        </form>
+    </div>
+    </div>
+    <div class="col-md-5">
+        <h3 class='alert alert-warning'>Pending Requests</h3>
+        <table class='table table-hover'>
+            <tr>
+                <th>student</th>
+                <th>semester</th>
+                <th>reason</th>
+            </tr>
+
+            {% for x in req %}
+            <tr>
+                <td>{{x.student_info}}</td>
+                <td>{{x.semester}}</td>
+                <td>{{x.message}}</td>
+            </tr>
+            {% endfor %}
+            
+        </table>
+    </div>
+</div>
+{% endblock content %}
+
+

@@ -1,0 +1,20 @@
+{% extends 'home/base.html' %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+    <div class="container mt-4">
+        <h2 class="alert alert-info text-center">Add New Semester</h2>
+        <h3>Semester</h3>
+        <div class="my-4">
+
+            <form action="" method="post">
+                {% csrf_token %}
+            <input type="text" name="semester" class="form-control mb-3" placeholder='Enter the name of semester'>
+                <input type="text" name="credit_rate" class="form-control mb-3" placeholder='Enter the credit rate'>
+            <input type="Submit" name="submit">
+            </form>
+        </div>
+
+    </div>
+{% endblock %}

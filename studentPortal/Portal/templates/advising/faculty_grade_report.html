@@ -1,0 +1,209 @@
+{% extends 'home/base.html' %}
+{% load static %}
+{% block content %}
+ <div class="container mt-4">
+
+
+        <h2 class="alert alert-info text-center">Student List</h2>
+        <form action="" method="post">
+        <select name='semester' id='semester' class="form-select my-3" aria-label="Default select example">
+           {% for x in semesters %}
+           <option value="{{x.semester}}">{{x.semester}}</option>
+           {% endfor %}
+         </select>
+            <select name='course' id='course' class="form-select my-3" aria-label="Default select example">
+           {% for y in courses %}
+           <option value="{{y.course_code}}">{{y.course_code}}</option>
+           {% endfor %}
+         </select>
+            <input type="text" name="section" id="section" class="form-control mb-3" placeholder='Enter the section'>
+         <button type='submit' class='btn btn-dark rounded-pill'>Show Student List</button>
+        </form>
+
+
+
+     {% if studentlists != 'Null' %}
+     <div  id="table1"   class='my-3'>
+        <table  class="table table-hover" id="gradetableid">
+            <thead>
+              <tr>
+                <th scope="col">Student ID</th>
+                  <th scope="col">Name</th>
+                <th scope="col">Grade</th>
+                  <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for student in studentlists %}
+              <tr id="{{student.id}}" class="Userinfo">
+
+                  <td hidden name="primaryid" class="student_td_primaryid Userinfo">{{student.id}}</td>
+                  <td name="studentid" class="student_td_id Userinfo">{{student.student_info}}</td>
+                  <td class="student_td_name Userinfo">{{student.student_info.first_name}} {{student.student_info.last_name}}</td>
+                  <td name="studentgrade Userinfo" class="student_td_grade">{{student.grade}}</td>
+                  <th>
+                      <button type="button" class="btn btn-primary" onclick="assigngrade({{student.id}})" data-toggle="modal" data-target="#exampleModal">Update</button>
+
+                  </th>
+              </tr>
+
+              {% endfor %}
+            </tbody>
+          </table>
+
+
+
+     </div>
+
+
+     {% endif %}
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Assign Grade</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+          <form action="" method="post" id="updatinggrade">
+              <div class="mb-3">
+
+                  <input type="text" hidden name="primaryid" id="modelprimaryid" class="btn btn-light" placeholder="enter the primary id">
+              </div>
+
+              <div class="mb-3">
+                  <label class="form-label">ID : </label>
+                  <input type="button" name="mid" id="modelid" class="btn btn-light" placeholder="enter the id">
+              </div>
+
+              <div class="mb-3">
+                  <label class="form-label">Grade</label>
+                  <input type="text" name="grade" id="modelgrade" class="btn btn-light" placeholder="enter the grade">
+
+              </div>
+
+              <button onclick="updategrade()" class="btn btn-primary" id="formsubmit">Save changes</button>
+
+          </form>
+
+
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+      </div>
+    </div>
+  </div>
+</div> </div>
+
+<!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+ <script>
+     const getGrade=()=>{
+         const table=document.getElementById('table1')
+         const semester=document.getElementById('semester').value
+         const course=document.getElementById('course').value
+         const section=document.getElementById('section').value
+
+         obj={
+         semester:semester,
+         course:course,
+         section:section
+         }
+         $.ajax({
+            url:"{% url 'f_grade' %}",
+            method:"POST",
+            data:obj,
+            success:function(data){
+                if(data.status==200){
+                    alert("paisi")
+                }
+
+            }
+        })
+
+
+
+
+
+
+
+
+
+
+         table.className="table table-hover my-3"
+         table.style.display='inline-block'
+
+
+
+     }
+
+     function assigngrade(id){
+        if(id){
+            let stu_id = ("#") + id;
+
+            let stu_primary_id = $(stu_id).find(".student_td_primaryid").text();
+            let stu_i_id = $(stu_id).find(".student_td_id").text();
+            let stu_grade = $(stu_id).find(".student_td_grade").text();
+
+
+            console.log(stu_primary_id, stu_i_id, stu_grade);
+
+            $("#modelprimaryid").val(stu_primary_id);
+            $("#modelid").val(stu_i_id);
+            $("#modelgrade").val(stu_grade);
+
+        }
+     }
+
+
+     const updateGrade=()=>{
+         const primaryid=document.getElementById('modelprimaryid').value
+         const i_id=document.getElementById('modelid').value
+         const grade=document.getElementById('modelgrade').value
+         console.log(primaryid)
+
+         obj={
+            "primaryid": primaryid,
+            "grade": grade
+            }
+         $ajax({
+            url:"{% url 'f_grade' %}",
+            data: obj,
+            method: "POST",
+            success: function(data){
+               if(data.status==700){
+                    location.reload();
+                location.reload();
+                }
+            }
+         })
+        $("#updatinggrade").trigger("reset");
+        $("#exampleModal").modal("hide");
+        return false;
+
+
+        };
+
+
+
+
+
+
+
+
+
+ </script>
+{% endblock content %}

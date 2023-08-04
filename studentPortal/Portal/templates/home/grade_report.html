@@ -1,0 +1,99 @@
+{% extends 'home/base.html' %}
+
+{% block content %}
+
+<div class="container">
+    <h2 class='alert my-4 text-center bg-dark text-white'>Grade Report</h2>
+</div>
+
+<div class="container mb-0">
+    {% comment %} <h3 class="alert text-center mb-0">Student's Information</h3> {% endcomment %}
+    <hr>
+    <div class='d-flex justify-content-center mt-0'>
+        <table>
+            <tr>
+                <td class='fs-4 fst-normal' colspan="2">Date:&emsp;</td>
+                <td class='fs-4 fw-bold'>{{date}}</td>
+                
+            </tr>
+            <tr>
+                <td class='fs-4 fst-normal' colspan="2">Name:&emsp;</td>
+                <td class='fs-4 fw-bold'>{{user.first_name}} {{user.last_name}}</td>
+                
+            </tr>
+            <tr>
+                <td class='fs-4 fst-normal' colspan="2">Id:</td>
+                <td class='fs-4 fw-bold'>{{user.username}}</td>
+            </tr>
+        </table>
+        
+    
+    </div>
+    <hr>
+</div>
+
+
+{% comment %} displaying courses {% endcomment %}
+
+<div class="container">
+
+    <div class="w-50">
+        {% for semester in semesters %}
+        <h5 class='alert alert-warning'>{{semester}}</h5>
+        <hr>
+        <table class='table'>
+            <th>Course</th>
+            <th>Course Title</th>
+            <th>cr</th>
+            <th>grade</th>
+
+            
+
+        
+        {% for x in courses %}
+        {% if x.current_semester == semester %}
+{% for course in course_detail %}
+{% if course.course_code == x.course %}
+        <tr>
+            <td>{{x}}</td>
+            <td>{{course.course_title}}</td>
+            <td>{{course.credit}}</td>
+            <td>{{x.grade}}</td>
+            
+            {% if x.grade == 'A+' or x.grade == 'A' %}
+            <td>{% widthratio course.credit 1 4 %}</td>
+            {% elif x.grade == 'A-' %}
+            <td>{% widthratio course.credit 1 3.70 %}</td>
+            {% elif x.grade == 'B+' %}
+            <td>{% widthratio course.credit 1 3.00 %}</td>
+            {% elif x.grade == 'B-' %}
+            <td>{% widthratio course.credit 1 2.70 %}</td>
+            {% endif %}
+            
+            
+        </tr>
+{% endif %}
+ {% endfor %}
+        {% endif %}
+        {% endfor %}
+            
+            
+
+        {% for key, value in semester_cg.items %}
+        {% if key == semester %}
+        <td rowspan='2'> <b> CGPA </b></td>
+        <td></td>
+        <td></td>
+      <td> <b> {{value.cg}} </b></td>
+      {% endif %}
+    {% endfor %}       
+    </table>
+    
+        {% endfor %}
+    </div>
+    
+</div>
+
+{% endblock content %}
+
+

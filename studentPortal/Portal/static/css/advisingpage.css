@@ -1,0 +1,22 @@
+.selected{
+    border-left: 1px solid lightgrey;
+    height: 100vh;
+}
+h4{
+    color: red;
+}
+
+form#signform{
+	width:400px;
+	padding-top:80px;
+	padding-bottom: 80px;
+	position:absolute;
+	top:50%;
+	left:70%;
+	transform: translate(-50%,-50%);
+	transition:0.25px;
+	text-align:left;
+	border-radius: 10px;
+	border: 1px solid rgba(0,0,0,0.1);
+	box-shadow: 2px 2px 15px rgba(0,0,0,0.3);
+}
